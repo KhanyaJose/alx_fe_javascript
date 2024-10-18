@@ -28,6 +28,27 @@ function addQuote(quoteText, category) {
     populateCategories(); // Update categories dropdown
     renderQuotes(quotes);
     filterQuotes(); // Refresh displayed quotes
+
+    // Send the new quote to the server
+    postQuoteToServer(newQuote);
+}
+
+// Post a new quote to the server
+async function postQuoteToServer(quote) {
+    try {
+        const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(quote)
+        });
+
+        const result = await response.json();
+        console.log('Quote posted successfully:', result);
+    } catch (error) {
+        console.error('Error posting quote:', error);
+    }
 }
 
 // Populate categories dynamically
