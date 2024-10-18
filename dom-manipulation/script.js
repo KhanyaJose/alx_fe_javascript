@@ -1,5 +1,5 @@
 // Array to store quotes
-let quotes = [
+let quotes = JSON.parse(localStorage.getItem('quotes')) || [
   { text: "Life is what happens when you're busy making other plans.", category: "Life" },
   { text: "Get busy living or get busy dying.", category: "Motivation" },
   { text: "The unexamined life is not worth living.", category: "Philosophy" },
@@ -34,6 +34,9 @@ function addQuote() {
   // Add new quote to the quotes array
   quotes.push({ text: newQuoteText, category: newQuoteCategory });
 
+  // Persist the quotes array to local storage
+  localStorage.setItem('quotes', JSON.stringify(quotes));
+
   // Clear input fields after adding the quote
   document.getElementById('newQuoteText').value = '';
   document.getElementById('newQuoteCategory').value = '';
@@ -42,8 +45,25 @@ function addQuote() {
   showRandomQuote();
 }
 
+// Function to filter quotes by category
+function filterQuotes() {
+  const filterCategory = document.getElementById('filterCategory').value.trim().toLowerCase();
+  const filteredQuotes = quotes.filter(quote => quote.category.toLowerCase().includes(filterCategory));
+
+  const quoteDisplay = document.getElementById('quoteDisplay');
+  
+  if (filteredQuotes.length > 0) {
+    quoteDisplay.innerHTML = filteredQuotes.map(quote => `<p>${quote.text} - <strong>${quote.category}</strong></p>`).join('');
+  } else {
+    quoteDisplay.innerHTML = '<p>No quotes found for the selected category.</p>';
+  }
+}
+
 // Event listener for the "Show New Quote" button
 document.getElementById('newQuoteButton').addEventListener('click', showRandomQuote);
 
 // Event listener for the "Add Quote" button
 document.getElementById('addQuoteButton').addEventListener('click', addQuote);
+
+// Event listener for the "Filter Quotes" button
+document.getElementById('filterButton').addEventListener('click', filterQuotes);
