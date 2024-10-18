@@ -20,6 +20,37 @@ function showRandomQuote() {
   quoteDisplay.innerHTML = `<p>${quote.text}</p><p><strong>Category:</strong> ${quote.category}</p>`;
 }
 
+// Function to dynamically create the "Add Quote" form
+function createAddQuoteForm() {
+  const formContainer = document.createElement('div');
+
+  // Create input for new quote text
+  const newQuoteTextInput = document.createElement('input');
+  newQuoteTextInput.id = 'newQuoteText';
+  newQuoteTextInput.type = 'text';
+  newQuoteTextInput.placeholder = 'Enter a new quote';
+  formContainer.appendChild(newQuoteTextInput);
+
+  // Create input for new quote category
+  const newQuoteCategoryInput = document.createElement('input');
+  newQuoteCategoryInput.id = 'newQuoteCategory';
+  newQuoteCategoryInput.type = 'text';
+  newQuoteCategoryInput.placeholder = 'Enter quote category';
+  formContainer.appendChild(newQuoteCategoryInput);
+
+  // Create button to add a new quote
+  const addQuoteButton = document.createElement('button');
+  addQuoteButton.textContent = 'Add Quote';
+  addQuoteButton.id = 'addQuoteButton';
+  formContainer.appendChild(addQuoteButton);
+
+  // Append form to the body
+  document.body.appendChild(formContainer);
+
+  // Event listener for adding a new quote
+  addQuoteButton.addEventListener('click', addQuote);
+}
+
 // Function to add a new quote dynamically
 function addQuote() {
   const newQuoteText = document.getElementById('newQuoteText').value.trim();
@@ -62,8 +93,10 @@ function filterQuotes() {
 // Event listener for the "Show New Quote" button
 document.getElementById('newQuoteButton').addEventListener('click', showRandomQuote);
 
-// Event listener for the "Add Quote" button
-document.getElementById('addQuoteButton').addEventListener('click', addQuote);
+// Function to initialize the page
+function initialize() {
+  createAddQuoteForm();  // Create the form on page load
+}
 
-// Event listener for the "Filter Quotes" button
-document.getElementById('filterButton').addEventListener('click', filterQuotes);
+// Run initialize on page load
+window.onload = initialize;
