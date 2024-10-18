@@ -163,12 +163,13 @@ function resolveConflicts(serverQuotes) {
     });
     saveQuotes(); // Save the merged quotes to local storage
     renderQuotes(quotes); // Render updated quotes in the DOM
-    alert('Quotes updated from server successfully!');
+    alert('Quotes updated from server successfully!'); // Notify user of update
 }
 
 // Sync quotes with the server
 async function syncQuotes() {
     await fetchQuotesFromServer();
+    alert('Quotes synced with server!'); // Notify user of sync
 }
 
 // Periodic sync with the server
