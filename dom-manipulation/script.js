@@ -107,10 +107,55 @@ function importFromJsonFile(event) {
     fileReader.readAsText(event.target.files[0]);
 }
 
+// Simulate fetching data from a server
+async function fetchQuotesFromServer() {
+    try {
+        const response = await fetch('https://jsonplaceholder.typicode.com/posts'); // Use a mock API
+        const serverQuotes = await response.json();
+        
+        // Simulating the format of your quotes
+        const formattedQuotes = serverQuotes.map(item => ({
+            text: item.title, // Example of using the title as a quote
+            category: 'fetched' // All quotes fetched from the server can be tagged with a category
+        }));
+
+        // Conflict resolution: merge local and server quotes
+        resolveConflicts(formattedQuotes);
+
+    } catch (error) {
+        console.error('Error fetching quotes:', error);
+    }
+}
+
+// Resolve conflicts by prioritizing server data
+function resolveConflicts(serverQuotes) {
+    serverQuotes.forEach(serverQuote => {
+        const existingQuoteIndex = quotes.findIndex(quote => quote.text === serverQuote.text);
+        if (existingQuoteIndex === -1) {
+            // If the quote from the server does not exist locally, add it
+            quotes.push(serverQuote);
+        } else {
+            // If the quote exists, we can choose to overwrite it or skip
+            // Here we choose to overwrite with server quote
+            quotes[existingQuoteIndex] = serverQuote;
+        }
+    });
+    saveQuotes(); // Save the merged quotes to local storage
+    renderQuotes(quotes); // Render updated quotes in the DOM
+    alert('Quotes updated from server successfully!');
+}
+
+// Periodic sync with the server
+function startPeriodicSync() {
+    fetchQuotesFromServer(); // Initial fetch
+    setInterval(fetchQuotesFromServer, 30000); // Sync every 30 seconds
+}
+
 // Event listeners
 document.addEventListener('DOMContentLoaded', () => {
     loadQuotes();
     displayRandomQuote(); // Display a random quote on load
+    startPeriodicSync(); // Start syncing with server
 });
 document.getElementById('exportButton').addEventListener('click', exportQuotes);
 document.getElementById('importFile').addEventListener('change', importFromJsonFile);
