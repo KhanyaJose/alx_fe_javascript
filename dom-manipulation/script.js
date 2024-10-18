@@ -68,6 +68,17 @@ function filterQuotes() {
     localStorage.setItem('lastSelectedCategory', selectedCategory);
 }
 
+// Display a random quote
+function displayRandomQuote() {
+    if (quotes.length > 0) {
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        const randomQuote = quotes[randomIndex].text; // Assuming each quote has a 'text' property
+        document.getElementById('quoteDisplay').textContent = randomQuote; // Display the random quote
+    } else {
+        document.getElementById('quoteDisplay').textContent = 'No quotes available.';
+    }
+}
+
 // Function to export quotes to JSON
 function exportQuotes() {
     const blob = new Blob([JSON.stringify(quotes)], { type: 'application/json' });
@@ -97,6 +108,10 @@ function importFromJsonFile(event) {
 }
 
 // Event listeners
-document.addEventListener('DOMContentLoaded', loadQuotes);
+document.addEventListener('DOMContentLoaded', () => {
+    loadQuotes();
+    displayRandomQuote(); // Display a random quote on load
+});
 document.getElementById('exportButton').addEventListener('click', exportQuotes);
 document.getElementById('importFile').addEventListener('change', importFromJsonFile);
+document.getElementById('randomQuoteButton').addEventListener('click', displayRandomQuote); // Button for random quote
