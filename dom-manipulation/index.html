@@ -34,3 +34,9 @@
 <button id="exportButton">Export Quotes</button>
 <input type="file" id="importFile" accept=".json" />
 <div id="quotesContainer"></div>
+
+<select id="categoryFilter" onchange="filterQuotes()">
+    <option value="all">All Categories</option>
+    <!-- Dynamically populated categories will go here -->
+</select>
+<div id="quotesContainer"></div>
