@@ -166,10 +166,15 @@ function resolveConflicts(serverQuotes) {
     alert('Quotes updated from server successfully!');
 }
 
+// Sync quotes with the server
+async function syncQuotes() {
+    await fetchQuotesFromServer();
+}
+
 // Periodic sync with the server
 function startPeriodicSync() {
-    fetchQuotesFromServer(); // Initial fetch
-    setInterval(fetchQuotesFromServer, 30000); // Sync every 30 seconds
+    syncQuotes(); // Initial sync
+    setInterval(syncQuotes, 30000); // Sync every 30 seconds
 }
 
 // Event listeners
