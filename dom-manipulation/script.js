@@ -100,3 +100,31 @@ function initialize() {
 
 // Run initialize on page load
 window.onload = initialize;
+
+function exportQuotes() {
+    const blob = new Blob([JSON.stringify(quotes)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'quotes.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+document.getElementById('exportButton').addEventListener('click', exportQuotes);
+
+function importFromJsonFile(event) {
+    const fileReader = new FileReader();
+    fileReader.onload = function(event) {
+        const importedQuotes = JSON.parse(event.target.result);
+        quotes.push(...importedQuotes);
+        saveQuotes(); // Update local storage
+        alert('Quotes imported successfully!');
+        // Optionally render the newly imported quotes in the DOM
+    };
+    fileReader.readAsText(event.target.files[0]);
+}
+
+document.getElementById('importFile').addEventListener('change', importFromJsonFile);
